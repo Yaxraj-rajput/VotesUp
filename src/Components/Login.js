@@ -12,6 +12,7 @@ import db from "../firebase";
 import { auth } from "../firebase";
 
 const googleProvider = new GoogleAuthProvider();
+
 const githubProvider = new GithubAuthProvider();
 const loginWithGoogle = () => {
   signInWithPopup(auth, googleProvider)
@@ -46,7 +47,6 @@ const loginWithGithub = () => {
       // The signed-in user info.
 
       const user = result.user;
-
       window.location.href = "/";
     })
     .catch((error) => {

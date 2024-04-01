@@ -7,6 +7,16 @@ import db from "../firebase";
 const VotePollHeader = () => {
   const [poll, setPoll] = useState(null);
   const { pollid } = useParams();
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setShowTooltip(true);
+    setTimeout(() => {
+      setShowTooltip(false);
+    }, 1000);
+  };
+
   useEffect(() => {
     const fetchPoll = async () => {
       const docRef = doc(db, "polls", pollid);
@@ -36,9 +46,29 @@ const VotePollHeader = () => {
         </span>
       </div>
       <div className="share_btns">
+        <button onClick={handleCopy}>
+          {!showTooltip && (
+            <span className="tooltip">
+              {" "}
+              <i className="bi bi-copy"></i>
+            </span>
+          )}
+          {showTooltip && <span className="tooltip">Copied!</span>}
+        </button>
+
         <button
           onClick={() => {
-            navigator.clipboard.writeText(window.location.href);
+            if (navigator.share) {
+              navigator
+                .share({
+                  title: "VotePoll",
+                  url: window.location.href,
+                })
+                .then(() => console.log("Successful share"))
+                .catch((error) => console.log("Error sharing", error));
+            } else {
+              navigator.clipboard.writeText(window.location.href);
+            }
           }}
         >
           <i className="bi bi-share"></i>

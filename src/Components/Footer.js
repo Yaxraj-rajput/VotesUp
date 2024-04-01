@@ -5,18 +5,33 @@ const Footer = () => {
     <div className="footer">
       <div className="top">
         <div className="social_links">
-          <a href="https://www.instagram.com/">
-            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"></img>
+          <a
+            target="_blank"
+            href="https://www.instagram.com/yaxraj_dabhi/"
+            aria-label="Instagram"
+          >
+            <i className="bi bi-instagram"></i>
           </a>
-
-          <a href="https://www.linkedin.com/">
-            <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png"></img>
+          <a
+            target="_blank"
+            href="https://www.linkedin.com/in/yaxraj-dabhi/"
+            aria-label="LinkedIn"
+          >
+            <i className="bi bi-linkedin"></i>
           </a>
-          <a href="https://www.github.com/">
-            <img src="https://cdn-icons-png.flaticon.com/512/733/733553.png"></img>
+          <a
+            target="_blank"
+            href="https://github.com/Yaxraj-rajput/"
+            aria-label="GitHub"
+          >
+            <i className="bi bi-github"></i>
           </a>
-          <a href="https://www.youtube.com/">
-            <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"></img>
+          <a
+            target="_blank"
+            href="https://www.youtube.com/@looppencil6612"
+            aria-label="YouTube"
+          >
+            <i className="bi bi-youtube"></i>
           </a>
         </div>
       </div>

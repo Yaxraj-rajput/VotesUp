@@ -1,5 +1,5 @@
 import React from "react";
-import right_arrow from "../../Static/Elements/right-arrow.png";
+import right_arrow from "../../Static/Elements/right-arrow.avif";
 import { Link } from "react-router-dom";
 
 const Vote_card = (props) => {
@@ -26,7 +26,14 @@ const Vote_card = (props) => {
         </div>
 
         <div className="card_title">
-          <h3>{props.card.title}</h3>
+          <h3>
+            {props.card.title
+              .split(" ")
+              .slice(0, 4)
+              .map((word) => word.substring(0, 10))
+              .join(" ")}
+            ...
+          </h3>
         </div>
 
         <div className="duration">

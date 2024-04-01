@@ -49,6 +49,24 @@ html {
 .login_main .buttons button:hover {
   background-color: rgba(255, 255, 255, 0.1921568627);
 }
+@media screen and (max-width: 768px) {
+  .login_main {
+    width: 100%;
+    padding: 2rem;
+    flex-direction: column;
+    align-items: center;
+  }
+  .login_main .buttons {
+    width: 100%;
+  }
+  .login_main .buttons button {
+    font-size: 1.1rem;
+    padding: 1.5rem;
+  }
+  .login_main .buttons button .bi {
+    font-size: 2rem;
+  }
+}
 
 .navbar {
   width: 100%;
@@ -57,6 +75,16 @@ html {
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  border: 1px solid rgba(255, 255, 255, 0.158);
+  margin-bottom: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background-color: #09080a;
+  transition: all 0.3s ease;
+}
+.navbar.scrolled {
+  height: 6rem;
 }
 .navbar .logo {
   width: 15%;
@@ -65,12 +93,22 @@ html {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+.navbar .logo .logo_image {
+  width: 1.5rem;
+  aspect-ratio: 1/1;
+  margin-right: 0.5rem;
 }
 .navbar .logo .logo_text {
   font-size: 2rem;
   font-weight: 700;
   color: white;
   text-decoration: none;
+}
+.navbar .logo:hover {
+  opacity: 0.8;
 }
 @media screen and (max-width: 768px) {
   .navbar .logo {
@@ -166,9 +204,58 @@ html {
   display: flex;
   flex-direction: column;
 }
+.home_main .cards_section_main .search_bar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.home_main .cards_section_main .search_bar input {
+  width: 100%;
+  height: 3rem;
+  padding: 1rem;
+  font-weight: 700;
+  color: white;
+  background-color: rgba(255, 255, 255, 0);
+  border: 1px solid rgba(255, 255, 255, 0.158);
+  border-radius: 0.3rem;
+  outline: none;
+}
 .home_main .cards_section_main .title {
   width: 100%;
   padding: 1rem 0rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.home_main .cards_section_main .title a {
+  text-decoration: none;
+}
+.home_main .cards_section_main .title a button {
+  border: none;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+  border-radius: 0.3rem;
+  transition: all 0.3s ease;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.0941176471);
+  border: 1px solid rgba(255, 255, 255, 0.158);
+}
+.home_main .cards_section_main .title a button .bi {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+.home_main .cards_section_main .title a button:hover {
+  background-color: rgba(255, 255, 255, 0.1921568627);
 }
 .home_main .cards_section_main .cards {
   width: 100%;
@@ -178,6 +265,8 @@ html {
   gap: 1.5rem;
   row-gap: 3rem;
   padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
 .home_main .cards_section_main .cards .vote_card_main {
   width: 100%;
@@ -191,10 +280,11 @@ html {
   border: 2px solid rgba(255, 255, 255, 0);
   border-radius: 1rem;
   transition: all 0.3s ease;
+  overflow: hidden;
   position: relative;
 }
 .home_main .cards_section_main .cards .vote_card_main:hover {
-  border: 2px solid rgba(255, 255, 255, 0.349);
+  border: 2px solid rgba(134, 93, 255, 0.3882352941);
 }
 .home_main .cards_section_main .cards .vote_card_main:hover .vote_btn {
   display: block;
@@ -206,6 +296,7 @@ html {
   outline: none;
   aspect-ratio: 1/1;
   border-radius: 50%;
+  background-color: #865dff;
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -271,6 +362,7 @@ html {
   font-size: 1.5rem;
   font-weight: 700;
   color: #fff;
+  text-wrap: wrap;
 }
 .home_main .cards_section_main .cards .vote_card_main .duration {
   width: 100%;
@@ -322,6 +414,31 @@ html {
   font-weight: 300;
   color: rgba(255, 255, 255, 0.5058823529);
 }
+.vote_poll_main .header .share_btns {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.vote_poll_main .header .share_btns .tooltip {
+  position: absolute;
+  color: #fff;
+  font-size: 1.5rem;
+  z-index: 999;
+  transition: all 0.3s ease;
+  animation: pop 0.5s ease;
+}
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 .vote_poll_main .header .share_btns button {
   width: 4rem;
   background-color: transparent;
@@ -344,14 +461,16 @@ html {
 .vote_poll_main .poll_section_main {
   width: 100%;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
   gap: 2rem;
 }
 .vote_poll_main .poll_section_main .poll_main {
-  width: 50%;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 1rem;
 }
 .vote_poll_main .poll_section_main .poll_main .total_votes {
@@ -389,6 +508,7 @@ html {
   font-size: 1.9rem;
   color: rgba(255, 255, 255, 0.7529411765);
   border-right: 1px solid white;
+  cursor: pointer;
 }
 .vote_poll_main .poll_section_main .poll_main .poll .poll_option .bar {
   width: 50%;
@@ -402,7 +522,7 @@ html {
 }
 .vote_poll_main .poll_section_main .poll_main .poll .poll_option .bar.active {
   width: 100%;
-  background-color: rgba(21, 184, 171, 0.9647058824);
+  background-color: #865dff;
   border: 1px solid transparent;
 }
 .vote_poll_main .poll_section_main .poll_main .poll .poll_option .vote_count {
@@ -411,7 +531,7 @@ html {
   padding: 1rem;
 }
 .vote_poll_main .poll_section_main .comments {
-  width: 50%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -446,6 +566,11 @@ html {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+@media screen and (max-width: 768px) {
+  .vote_poll_main .poll_section_main .comments .comment_container .comment_list {
+    overflow-y: auto;
+  }
 }
 .vote_poll_main .poll_section_main .comments .comment_container .comment_list:hover {
   overflow-y: auto;
@@ -499,6 +624,14 @@ html {
   font-size: 1.3rem;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.8823529412);
+}
+.vote_poll_main .poll_section_main .analytics_main {
+  width: 100%;
+  height: 50vh;
+}
+.vote_poll_main .poll_section_main .analytics_main .graph {
+  width: 100%;
+  height: 100%;
 }
 @media screen and (max-width: 768px) {
   .vote_poll_main {
@@ -645,7 +778,7 @@ html {
 }
 .new_poll_main form button {
   width: 100%;
-  background-color: #15b8ab;
+  background-color: #865dff;
   border: none;
   outline: none;
   display: flex;
@@ -663,7 +796,8 @@ html {
   font-size: 1.5rem;
 }
 .new_poll_main form button:hover {
-  background-color: rgba(21, 184, 171, 0.9647058824);
+  background-color: #865dff;
+  opacity: 0.8;
 }
 
 .alter_description {
@@ -788,13 +922,14 @@ html {
   transition: all 0.3s ease;
   padding: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.158);
-  background-color: rgba(21, 184, 171, 0.0941176471);
+  background-color: #865dff;
 }
 .profile_main .profile_card a button .bi {
   font-size: 3rem;
 }
 .profile_main .profile_card a button:hover {
-  background-color: rgba(21, 184, 171, 0.2117647059);
+  background-color: #865dff;
+  opacity: 0.8;
 }
 @media screen and (max-width: 768px) {
   .profile_main {
@@ -869,14 +1004,7 @@ html {
   margin: 0.5rem;
   transition: all 0.3s ease;
 }
-.footer .top .social_links a:hover img {
-  filter: grayscale(0);
-}
-.footer .top .social_links a img {
-  width: 1.5rem;
-  height: 1.5rem;
-  -o-object-fit: cover;
-     object-fit: cover;
-  filter: grayscale(1);
-  transition: all 0.3s ease;
+.footer .top .social_links a .bi {
+  font-size: 1.5rem;
+  transform: translateY(0.2rem);
 }/*# sourceMappingURL=Style.css.map */

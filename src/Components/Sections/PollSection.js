@@ -3,7 +3,6 @@ import {
   collection,
   doc,
   getDoc,
-  query,
   updateDoc,
   runTransaction,
   onSnapshot,
@@ -14,11 +13,13 @@ import { useParams } from "react-router-dom";
 import { arrayUnion, arrayRemove } from "firebase/firestore";
 import CommentsSection from "./CommentsSection";
 import { useAuth } from "../../Context/AuthContext";
+import AnalyticsSection from "./AnalyticsSection";
 
 const PollSection = () => {
   const user = useAuth();
   const [poll, setPoll] = useState(null);
   const [liveCount, setLiveCount] = useState(0);
+  const [isVoting, setIsVoting] = useState(false); // New state to track voting status
 
   const { pollid } = useParams();
   useEffect(() => {
@@ -58,7 +59,7 @@ const PollSection = () => {
     <div className="poll_section_main">
       <div className="poll_main">
         <span className="status">
-          {liveCount} {liveCount == 1 ? "person " : "people "}
+          {liveCount} {liveCount === 1 ? "person " : "people "}
           live on this vote channel
         </span>
         <div className="poll">
@@ -70,55 +71,83 @@ const PollSection = () => {
               return (
                 <div
                   className="poll_option"
-                  onClick={async () => {
-                    const docRef = doc(db, "polls", pollid);
+                  onClick={
+                    isVoting
+                      ? null
+                      : async () => {
+                          setIsVoting(true); // Set voting to true when a vote is initiated
 
-                    let uid = user ? user.uid : null;
-                    const isStrict = poll ? poll.isStrict : false;
+                          const docRef = doc(db, "polls", pollid);
 
-                    if (!uid) {
-                      if (isStrict) {
-                        alert("You must be logged in to vote for this poll!");
-                        return;
-                      }
+                          let uid = user ? user.uid : null;
+                          const isStrict = poll ? poll.isStrict : false;
 
-                      uid = localStorage.getItem("guestId");
-                      if (!uid) {
-                        uid = Math.random().toString(36).substring(2);
-                        localStorage.setItem("guestId", uid);
-                      }
-                    }
+                          if (!uid) {
+                            if (isStrict) {
+                              alert(
+                                "You must be logged in to vote for this poll!"
+                              );
+                              return;
+                            }
 
-                    await runTransaction(db, async (transaction) => {
-                      const docSnap = await transaction.get(docRef);
+                            uid = localStorage.getItem("guestId");
+                            if (!uid) {
+                              uid = Math.random().toString(36).substring(2);
+                              localStorage.setItem("guestId", uid);
+                            }
+                          }
 
-                      if (!docSnap.exists()) {
-                        throw "Document does not exist!";
-                      }
+                          setPoll((prevPoll) => {
+                            const newOptions = prevPoll.options.map((o) =>
+                              o.text === option.text
+                                ? { ...o, votes: o.votes + 1 }
+                                : o
+                            );
+                            return {
+                              ...prevPoll,
+                              options: newOptions,
+                              total_votes: prevPoll.total_votes + 1,
+                              voters: {
+                                ...prevPoll.voters,
+                                [uid]: option.text,
+                              },
+                            };
+                          });
 
-                      const data = docSnap.data();
-                      if (data.voters && data.voters[uid]) {
-                        return;
-                      }
-                      const newOptions = data.options.map((o) =>
-                        o.text === option.text
-                          ? { ...o, votes: o.votes + 1 }
-                          : o
-                      );
+                          await runTransaction(db, async (transaction) => {
+                            const docSnap = await transaction.get(docRef);
 
-                      transaction.update(docRef, {
-                        options: newOptions,
-                        total_votes: increment(1),
-                        voters: { ...data.voters, [uid]: option.text },
-                      });
-                    });
+                            if (!docSnap.exists()) {
+                              throw "Document does not exist!";
+                            }
 
-                    const docSnap = await getDoc(docRef);
-                    if (docSnap.exists()) {
-                      setPoll({ ...docSnap.data(), id: docSnap.id });
-                    }
-                  }}
+                            const data = docSnap.data();
+                            if (data.voters && data.voters[uid]) {
+                              return;
+                            }
+                            const newOptions = data.options.map((o) =>
+                              o.text === option.text
+                                ? { ...o, votes: o.votes + 1 }
+                                : o
+                            );
+
+                            transaction.update(docRef, {
+                              options: newOptions,
+                              total_votes: increment(1),
+                              voters: { ...data.voters, [uid]: option.text },
+                            });
+                          });
+
+                          const docSnap = await getDoc(docRef);
+                          if (docSnap.exists()) {
+                            setPoll({ ...docSnap.data(), id: docSnap.id });
+                          }
+
+                          setIsVoting(false); // Set voting to false after the transaction is complete
+                        }
+                  }
                   key={i}
+                  style={isVoting ? { pointerEvents: "none" } : {}} // Disable pointer events while voting is in progress
                 >
                   <span className="option">{option.text}</span>
                   <div
@@ -136,6 +165,7 @@ const PollSection = () => {
         </div>
       </div>
       <CommentsSection pollid={pollid} />
+      <AnalyticsSection pollid={pollid} />
     </div>
   );
 };

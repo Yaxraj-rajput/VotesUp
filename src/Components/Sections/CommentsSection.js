@@ -45,6 +45,14 @@ const CommentsSection = (props) => {
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
+
+      if (comment.trim() === "") return;
+
+      if (!user) {
+        alert("You need to log in to comment.");
+        return;
+      }
+
       addComment(comment);
       setComment(""); // Clear the input field
     }

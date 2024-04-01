@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import db from "../firebase";
 import { useAuth } from "../Context/AuthContext";
-import Modal from "react-modal";
 
 const NewPoll = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -50,8 +49,9 @@ const NewPoll = () => {
         poll_by_photo: poll_by_photo,
         poll_by_uid: poll_by_uid,
         voters: [],
+        time_added: new Date(),
       });
-      const pollLink = `http://localhost:3000/poll/${docRef.id}`;
+      const pollLink = `https://votesup.tech/#/poll/${docRef.id}`;
 
       setPollLink(pollLink);
       setModalIsOpen(true);
@@ -63,9 +63,14 @@ const NewPoll = () => {
   return (
     <div className="new_poll_main">
       <form onSubmit={createPoll}>
-        <input type="text" ref={title} placeholder="Poll Title" />
+        <input type="text" ref={title} placeholder="Poll Title" required />
         <input type="text" ref={description} placeholder="Description" />
-        <input type="date" ref={date} />
+        <input
+          type="date"
+          min={new Date().toISOString().split("T")[0]}
+          ref={date}
+          required
+        />
         <div className="checkbox">
           <span className="check">Private</span>
           <input type="checkbox" ref={isPrivate} />
@@ -80,6 +85,7 @@ const NewPoll = () => {
         {options.map((option, index) => (
           <input
             key={index}
+            {...(index === 0 || index === 1 ? { required: true } : {})}
             onChange={() => changeOptionCount(index)}
             type="text"
             placeholder={`Option ${index + 1}`}
@@ -96,9 +102,9 @@ const NewPoll = () => {
         <div className="custom-modal-overlay">
           <div className="custom-modal">
             <h2>Poll successfully created!</h2>
-            <p>Share this link to invite others to vote:</p>
+            <p>Go To Given Link To Vote & Share</p>
 
-            <a href={pollLink}>{pollLink}</a>
+            <a href={pollLink}>Go To Poll</a>
             <button className="close_btn" onClick={() => setModalIsOpen(false)}>
               <i className="bi bi-x-lg"></i>
             </button>
