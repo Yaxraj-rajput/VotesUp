@@ -1,25 +1,33 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "VotesUp",
+  "name": "VotesUp - Online Voting App",
+  "description": "An online voting app that lets you create and participate in polls.",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "./favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "https://firebasestorage.googleapis.com/v0/b/votesup-19e2f.appspot.com/o/Logo-bg-smaller.png?alt=media&token=24d085ed-585f-40bd-af3d-b46c57245dde",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "https://firebasestorage.googleapis.com/v0/b/votesup-19e2f.appspot.com/o/Logo-bg-smaller.png?alt=media&token=24d085ed-585f-40bd-af3d-b46c57245dde",
       "type": "image/png",
       "sizes": "512x512"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/votesup-19e2f.appspot.com/o/Logo-bg-smaller.png?alt=media&token=24d085ed-585f-40bd-af3d-b46c57245dde",
+      "type": "image/png",
+      "sizes": "180x180"
     }
   ],
   "start_url": ".",
   "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
   "theme_color": "#000000",
   "background_color": "#ffffff"
 }
